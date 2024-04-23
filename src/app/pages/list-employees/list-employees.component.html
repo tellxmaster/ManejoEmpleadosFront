@@ -1,0 +1,91 @@
+<div class="container mt-3">
+
+    <div *ngIf="isLoading" class="spinner-backdrop">
+        <div class="spinner-container text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-primary text-center" role="alert">
+        <h6 class="text-primary">Módulo de Empleados</h6>
+    </div>
+    <h5 class="mb-4">
+        Listado de Empleados <i class="bi bi-people-fill"></i>
+    </h5>
+    <div class="row mb-4">
+        <!-- Name Search -->
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" [(ngModel)]="searchName" class="form-control">
+            </div>
+        </div>
+        <!-- Code Search -->
+        <div class="col-md-5">
+            <div class="form-group">
+                <label for="employeeCode">Código empleado:</label>
+                <input type="text" id="employeeCode" [(ngModel)]="searchCode" class="form-control">
+            </div>
+        </div>
+        <!-- Search Button -->
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-success w-100" (click)="filterEmployees()">Buscar</button>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="results">
+        <table class="table table-hover min-vh-100">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let employee of paginatedEmployees">
+                    <td>{{ employee.firstName }} {{ employee.lastName }}</td>
+                    <td>{{ employee.code }}</td>
+                    <td>{{ employee.status | statusPipe }}</td>
+                    <td>
+                        <a [routerLink]="['/edit-employee', employee.id]" class="btn btn-outline-primary my-2 my-sm-0">
+                            Editar <i class="bi bi-pencil-square"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination Controls -->
+        <nav aria-label="Employee pagination">
+            <ul class="pagination">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="#" (click)="previousPage($event)" aria-label="Previous">
+                        <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+                    </a>
+                </li>
+                <li class="page-item" *ngFor="let page of pages" [class.active]="currentPage === page">
+                    <a class="page-link" href="#" (click)="changePage($event, page)">{{ page }}</a>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages()">
+                    <a class="page-link" href="#" (click)="nextPage($event)" aria-label="Next">
+                        <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+
+            <div>Páginas: {{ totalPages() }}</div>
+        </nav>
+
+    </div>
+    <div class="button-group d-flex flex-wrap justify-content-center mt-3">
+        <a [routerLink]="['/create-employee']" class="btn btn-success mx-1" style="min-width: 120px;">Crear</a>
+        <a [routerLink]="['/report-employees']" class="btn btn-warning mx-1 " style="min-width: 120px;">Reporte</a>
+        <button type="button" class="btn btn-danger mx-1 " style="min-width: 120px;">Salir</button>
+    </div>
+</div>

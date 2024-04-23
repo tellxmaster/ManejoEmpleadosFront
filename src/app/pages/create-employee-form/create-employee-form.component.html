@@ -1,0 +1,273 @@
+<div class="container mt-3">
+    <div *ngIf="isLoading" class="spinner-backdrop">
+        <div class="spinner-container text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-primary text-center" role="alert">
+        <h6 class="text-primary">Módulo de Empleados</h6>
+    </div>
+    <h5 class="mb-4">
+        Crear nuevo empleado <i class="bi bi-person-fill-add"></i>
+    </h5>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <li [ngbNavItem]="1">
+            <a ngbNavLink>Datos Personales</a>
+            <ng-template ngbNavContent>
+
+                <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="firstName">Nombres</label>
+                            <input type="text" id="firstName" class="form-control" formControlName="firstName"
+                                placeholder="Introduzca el nombre">
+                            <div *ngIf="employeeForm.controls['firstName'].invalid && (employeeForm.controls['firstName'].touched)"
+                                class="alert alert-danger">
+                                <div
+                                    *ngIf="employeeForm.controls['firstName'].errors && employeeForm.controls['firstName'].errors['required']">
+                                    El nombre es requerido.
+                                </div>
+                                <div
+                                    *ngIf="employeeForm.controls['firstName'].errors && employeeForm.controls['firstName'].errors['minlength']">
+                                    El nombre debe tener al menos 2 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="lastName">Apellidos</label>
+                            <input type="text" id="lastName" class="form-control" formControlName="lastName"
+                                placeholder="Introduzca el apellido">
+                            <div *ngIf="employeeForm.controls['lastName'].invalid && (employeeForm.controls['lastName'].touched)"
+                                class="alert alert-danger">
+                                <div
+                                    *ngIf="employeeForm.controls['lastName'].errors && employeeForm.controls['lastName'].errors['required']">
+                                    El apellido es requerido.
+                                </div>
+                                <div
+                                    *ngIf="employeeForm.controls['lastName'].errors && employeeForm.controls['lastName'].errors['minlength']">
+                                    El apellido debe tener al menos 2 caracteres.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="idNumber">Cédula (Válida)</label>
+                            <input type="text" id="idNumber" class="form-control" formControlName="idNumber"
+                                placeholder="Ej. 1702132657">
+                            <div *ngIf="employeeForm.controls['idNumber'].invalid && (employeeForm.controls['idNumber'].touched)"
+                                class="alert alert-danger">
+                                <div
+                                    *ngIf="employeeForm.controls['idNumber'].errors && employeeForm.controls['idNumber'].errors['pattern']">
+                                    La cédula debe tener 10 caracteres.
+                                </div>
+                                <div
+                                    *ngIf="employeeForm.controls['idNumber'].errors && employeeForm.controls['idNumber'].errors['required']">
+                                    La cédula es requerida
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="province">Provincia</label>
+                            <select id="province" class="form-control" formControlName="province">
+                                <option value="">Escoge una provincia...</option>
+                                <option *ngFor="let province of provinces" [value]="province.id">
+                                    {{province.nombre_provincia}}
+                                </option>
+                            </select>
+                            <div *ngIf="employeeForm.controls['province'].invalid && (employeeForm.controls['province'].touched)"
+                                class="alert alert-danger">
+                                La provincia es requerida.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="birthDate">Fecha de Nacimiento</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="birthDate" placeholder="aaaa-mm-dd"
+                                    formControlName="birthDate">
+
+                            </div>
+                            <div *ngIf="employeeForm.controls['birthDate'].invalid && (employeeForm.controls['birthDate'].touched)"
+                                class="alert alert-danger mt-2">
+                                La fecha de nacimiento es requerida.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="email">Email: (Válida)</label>
+                            <input type="email" class="form-control" id="email" placeholder="correo-personal@email.com"
+                                formControlName="email">
+                            <div *ngIf="employeeForm.controls['email'].invalid && (employeeForm.controls['email'].touched)"
+                                class="alert alert-danger mt-2">
+                                <div
+                                    *ngIf="employeeForm.controls['email'].errors && employeeForm.controls['email'].errors['required']">
+                                    El email es requerido.
+                                </div>
+                                <div
+                                    *ngIf="employeeForm.controls['email'].errors && employeeForm.controls['email'].errors['email']">
+                                    Por favor, introduce un email válido.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="personalObservations">Observaciones</label>
+                            <textarea name="personalObservations" id="personalObservations" cols="30" rows="4"
+                                class="form-control" formControlName="personalObservations"
+                                placeholder="Comentario u observación referente a la ficha personal"></textarea>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="photo">Fotografía</label>
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-3 image-container">
+                                    <img #profilePicture class="profile-picture" [src]="imageUrl" alt="Profile Photo">
+                                </div>
+                                <div class="col-md-9 d-flex align-items-center">
+                                    <input #fileInput type="file" id="photo" (change)="onFileChange($event)" hidden>
+                                    <button type="button" class="btn btn-primary" (click)="fileInput.click()">Cargar
+                                        Imagen</button>
+                                    <span *ngIf="uploadedFile" class="ml-2 d-none d-md-inline">{{ uploadedFile.name
+                                        }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- Botones de acción -->
+                    <div class="button-group d-flex flex-wrap justify-content-center">
+                        <button type="button" class="btn btn-success mx-1 button-responsive" style="min-width: 120px;"
+                            (click)="changeTab()">Continuar</button>
+                        <a [routerLink]="['/report-employees']" class="btn btn-warning mx-1 button-responsive"
+                            style="min-width: 120px;">Reporte</a>
+                        <a [routerLink]="['/list-employees']" class="btn btn-danger mx-1 button-responsive"
+                            style="min-width: 120px;">Salir</a>
+                    </div>
+
+                </form>
+
+            </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+            <a ngbNavLink>Datos Laborales</a>
+            <ng-template ngbNavContent>
+                <!-- Formulario de datos laborales aquí -->
+                <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="startDate">Fecha de Ingreso</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="startDate" placeholder="aaaa-mm-dd"
+                                    formControlName="startDate">
+
+                            </div>
+                            <div *ngIf="employeeForm.controls['startDate'].invalid && ( employeeForm.controls['startDate'].touched)"
+                                class="alert alert-danger mt-2">
+                                La fecha de ingreso es requerida.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="position">Cargo</label>
+                            <input type="text" id="position" class="form-control" formControlName="position"
+                                placeholder="Introduzca el cargo">
+                            <div *ngIf="employeeForm.controls['position'].invalid && (employeeForm.controls['position'].touched)"
+                                class="alert alert-danger">
+                                <div
+                                    *ngIf="employeeForm.controls['position'].errors && employeeForm.controls['position'].errors['required']">
+                                    El cargo es requerido.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="department">Departamento</label>
+                            <input type="text" id="department" class="form-control" formControlName="department"
+                                placeholder="Ingrese el departamento">
+                            <div *ngIf="employeeForm.controls['department'].invalid && (employeeForm.controls['department'].touched)"
+                                class="alert alert-danger">
+                                <div
+                                    *ngIf="employeeForm.controls['department'].errors && employeeForm.controls['department'].errors['required']">
+                                    El departamento es requerido.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="my-2" for="employmentProvince">Provincia</label>
+                            <select id="employmentProvince" class="form-control" formControlName="employmentProvince">
+                                <option value="">Escoge una provincia...</option>
+                                <option *ngFor="let province of provinces" [value]="province.id">
+                                    {{province.nombre_provincia}}
+                                </option>
+                            </select>
+                            <div *ngIf="employeeForm.controls['employmentProvince'].invalid && (employeeForm.controls['employmentProvince'].touched)"
+                                class="alert alert-danger">
+                                La provincia es requerida.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Campo de sueldo -->
+                        <div class="form-group col-md-6">
+                            <label for="salary">Sueldo:</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="salary" placeholder="530.00" min="0"
+                                    step=".01" formControlName="salary">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">USD</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Selector de jornada parcial -->
+                        <div class="form-group col-md-6">
+                            <label>Jornada Parcial:</label>
+                            <div class="d-flex align-items-center">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="partTimeYes" value="true"
+                                        formControlName="partTime">
+                                    <label class="form-check-label" for="partTimeYes">Sí</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="partTimeNo" value="false"
+                                        formControlName="partTime">
+                                    <label class="form-check-label" for="partTimeNo">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="form-group col-md-12">
+                            <label class="my-2" for="employmentObservations">Observaciones</label>
+                            <textarea name="employmentObservations" id="employmentObservations" cols="30" rows="4"
+                                class="form-control" formControlName="employmentObservations"
+                                placeholder="Comentario u observación referente a la ficha laboral"></textarea>
+                        </div>
+                    </div>
+                    <!-- Botones de acción -->
+                    <div class="button-group d-flex flex-wrap justify-content-center mt-3">
+                        <button type="button" class="btn btn-secondary mx-1 button-responsive" style="min-width: 120px;"
+                            (click)="changeTab()">Regresar</button>
+                        <button type="submit" class="btn btn-success mx-1 button-responsive" style="min-width: 120px;"
+                            [disabled]="employeeForm.invalid">Guardar</button>
+                        <a [routerLink]="['/report-employees']" class="btn btn-warning mx-1 button-responsive"
+                            style="min-width: 120px;">Reporte</a>
+                        <a [routerLink]="['/list-employees']" class="btn btn-danger mx-1 button-responsive"
+                            style="min-width: 120px;">Salir</a>
+                    </div>
+
+                </form>
+
+            </ng-template>
+        </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+    <!-- Para depurar y ver el ID activo de la pestaña -->
+    <pre>Pasos: {{ active }}/2</pre>
+
+</div>

@@ -1,0 +1,26 @@
+.table-filter {
+  padding: 20px;
+}
+
+.mat-elevation-z8 {
+  overflow: auto;
+  max-height: 400px;
+}
+
+.column-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  width: 250px;
+}
+
+.mat-menu-panel {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 12px 20px;
+  border-bottom: 2px solid #dee2e6;
+}
