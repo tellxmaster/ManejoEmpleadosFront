@@ -9,18 +9,18 @@ Este proyecto se generó con [Angular CLI](https://github.com/angular/angular-cl
 
 ## Instalación
 
-> **Nota:** Es necesario previo a utilizar lo siguiente tener descargado y funcionando el [Backend](https://github.com/tellxmaster/EmployeeManagementBackend).
+> **Nota:** Es necesario previo a utilizar lo siguiente tener descargado y funcionando el [Backend](https://github.com/tellxmaster/ManejoEmpleadosBackend).
 
 1. Clonar el repositorio
 
 ```sh
-git clone https://github.com/tellxmaster/EmployeeManagementFrontend.git
+git clone https://github.com/tellxmaster/ManejoEmpleadosFront.git
 ```
 
 2. Navegar a la carpeta
 
 ```sh
-cd EmployeeManagementFrontend
+cd ManejoEmpleadosFront
 ```
 
 3. Instalar dependencias
