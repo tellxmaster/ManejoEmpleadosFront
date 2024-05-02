@@ -75,7 +75,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.178);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,3 +99,31 @@ body {
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 //@import "../node_modules/ngx-toastr/toastr.css";
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+}
+
+::view-transition-new(root) {
+  animation: enter 200ms ease-in 0s 1 normal forwards;
+}

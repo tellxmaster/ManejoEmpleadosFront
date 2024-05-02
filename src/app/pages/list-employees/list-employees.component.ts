@@ -6,6 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { EmployeesService } from '../../services/employees.service';
 import { Employee } from '../../models/employee.model';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { StatusPipe } from '../../pipes/status.pipe';
 
 @Component({
@@ -17,6 +20,9 @@ import { StatusPipe } from '../../pipes/status.pipe';
     HttpClientModule,
     FormsModule,
     StatusPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
   ],
   providers: [EmployeesService],
   templateUrl: './list-employees.component.html',
@@ -27,7 +33,7 @@ export class ListEmployeesComponent implements OnInit {
   employees: Employee[] = [];
   filteredEmployees: Employee[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 20;
+  itemsPerPage: number = 15;
   searchName: string = '';
   searchCode: string = '';
 

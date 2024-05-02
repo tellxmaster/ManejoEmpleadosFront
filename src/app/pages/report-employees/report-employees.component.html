@@ -48,20 +48,28 @@
             <ng-container *ngFor="let col of columnNames" [matColumnDef]="col.id">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ col.name }} </th>
                 <td mat-cell *matCellDef="let element">
-                    <!-- Apply dateFormat pipe conditionally -->
                     <ng-container *ngIf="col.id === 'birthDate' || col.id === 'startDate'; else otherCells">
                         {{ element[col.id] | dateFormat }}
                     </ng-container>
-                    <!-- Handling other cells -->
+
                     <ng-template #otherCells>
-                        <!-- Special handling for partTime to show Si/No -->
-                        <ng-container *ngIf="col.id === 'partTime'; else normalCell">
+                        <ng-container *ngIf="col.id === 'partTime'; else notPartTime">
                             {{ element[col.id] ? 'Si' : 'No' }}
                         </ng-container>
-                        <ng-template #normalCell>{{ element[col.id] }}</ng-template>
+
+                        <ng-template #notPartTime>
+                            <ng-container *ngIf="col.id === 'province_id'; else normalCell">
+                                {{ getProvinceNameById(element[col.id]) }}
+                            </ng-container>
+
+                            <ng-template #normalCell>
+                                {{ element[col.id] }}
+                            </ng-template>
+                        </ng-template>
                     </ng-template>
                 </td>
             </ng-container>
+
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

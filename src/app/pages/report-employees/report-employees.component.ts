@@ -17,6 +17,8 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { EmployeesService } from '../../services/employees.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ProvincesService } from '../../services/provinces.service';
+import { Province } from '../../models/province.model';
 
 @Component({
   selector: 'app-report-employees',
@@ -35,18 +37,19 @@ import { HttpClientModule } from '@angular/common/http';
     RouterLink,
     HttpClientModule,
   ],
-  providers: [EmployeesService],
+  providers: [EmployeesService, ProvincesService],
   templateUrl: './report-employees.component.html',
   styleUrl: './report-employees.component.scss',
 })
 export class ReportEmployeesComponent implements AfterViewInit {
   isLoading: boolean = false;
+  provinces: Province[] = [];
   employees: Employee[] = [];
   displayedColumns: string[] = [
     'firstName',
     'lastName',
     'idNumber',
-    'province',
+    'province_id',
     'birthDate',
     'email',
     'startDate',
@@ -59,7 +62,7 @@ export class ReportEmployeesComponent implements AfterViewInit {
     'firstName',
     'lastName',
     'idNumber',
-    'province',
+    'province_id',
     'birthDate',
     'email',
     'startDate',
@@ -72,7 +75,7 @@ export class ReportEmployeesComponent implements AfterViewInit {
     { id: 'firstName', name: 'Nombres' },
     { id: 'lastName', name: 'Apellidos' },
     { id: 'idNumber', name: 'Cédula' },
-    { id: 'province', name: 'Provincia' },
+    { id: 'province_id', name: 'Provincia' },
     { id: 'birthDate', name: 'Fecha Nacimiento' },
     { id: 'email', name: 'Email' },
     { id: 'startDate', name: 'Fecha Inicio' },
@@ -85,7 +88,11 @@ export class ReportEmployeesComponent implements AfterViewInit {
   currentDate = new Date();
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
-  constructor(private employeesService: EmployeesService) {
+  constructor(
+    private employeesService: EmployeesService,
+    private provincesService: ProvincesService
+  ) {
+    this.loadProvinces();
     this.loadEmployees();
   }
 
@@ -125,6 +132,17 @@ export class ReportEmployeesComponent implements AfterViewInit {
     });
   }
 
+  loadProvinces() {
+    this.provincesService.list().subscribe({
+      next: (data) => {
+        this.provinces = data;
+      },
+      error: (err) => {
+        console.error('Error loading provinces:', err);
+      },
+    });
+  }
+
   loadEmployees() {
     this.isLoading = true;
     this.employeesService.list().subscribe({
@@ -138,5 +156,10 @@ export class ReportEmployeesComponent implements AfterViewInit {
         this.isLoading = false;
       },
     });
+  }
+
+  getProvinceNameById(id: number): string {
+    const province = this.provinces.find((prov) => prov.id === id);
+    return province ? province.nombre_provincia : 'Desconocido';
   }
 }
